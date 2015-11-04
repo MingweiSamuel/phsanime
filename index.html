@@ -39,7 +39,7 @@
   
   <script type="text/javascript">
     var images = ['anohana_01.jpg', 'death-parade_01.jpg', 'hibike_01.png', 'haruhi_01.jpg', 'snafu_01.jpg', 'toradora_01.jpg'];
-    document.documentElement.style.backgroundImage = 'url(bg/' + images[(images.length * Math.random())|0] + ')';
+    document.documentElement.style.backgroundImage = 'url(bg/' + images[Math.floor(new Date().getTime() / 2000) % images.length] + ')';
   </script>
 
   <!-- Favicon
