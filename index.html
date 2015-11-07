@@ -22,12 +22,9 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/skeleton.css">
   <style type="text/css">
-    html { 
-      background: #836 no-repeat center center fixed;
-      -webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
-      background-size: cover;
+    body {
+      background-color: #836;
+      overflow: hidden;
     }
     
     h1, p {
@@ -36,16 +33,20 @@
       background-color: rgba(0, 0, 0, 0.75);
     }
     
-    #background-container > span {
+    #background-container > div, #content-container {
       width: 100%;
       height: 100%;
       position: absolute;
       top: 0px;
       left: 0px;
+      overflow: auto;
+    }
+    
+    #background-container > div {
       opacity: 0;
       z-index: -1;
       
-      background: #836 no-repeat center center fixed;
+      background: no-repeat center center fixed;
       -webkit-background-size: cover;
       -moz-background-size: cover;
       -o-background-size: cover;
@@ -70,11 +71,13 @@
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <div class="container">
-    <div class="row">
-      <div class="one-half column" style="margin-top: 20%">
-        <h1>Piedmont High School <b>Anime</b> Club</h1>
-        <p><b>Monday</b>, <b>Tuesday</b>, and <b>Thursday</b><br />Room <b>32</b> (Hayden's)<br /><b>Lunch</b></p>
+  <div id="content-container">
+    <div class="container">
+      <div class="row">
+        <div class="one-half column" style="margin-top: 20%">
+          <h1>Piedmont High School <b>Anime</b> Club</h1>
+          <p><b>Monday</b>, <b>Tuesday</b>, and <b>Thursday</b><br />Room <b>32</b> (Hayden's)<br /><b>Lunch</b></p>
+        </div>
       </div>
     </div>
   </div>
@@ -109,13 +112,13 @@
       while (bgContainer.children.length > 1)
         bgContainer.removeChild(bgContainer.firstChild);
       
-      var span = document.createElement('span');
-      span.style.backgroundImage = 'url(' + src + ')';
-      bgContainer.appendChild(span);
+      var div = document.createElement('div');
+      div.style.backgroundImage = 'url(' + src + ')';
+      bgContainer.appendChild(div);
       
       var image = new Image();
       image.onload = (function() {
-        setTimeout(function() { span.style.opacity = 1 }, 100);
+        setTimeout(function() { div.style.opacity = 1 }, 100);
       });
       image.src = src;
     }
