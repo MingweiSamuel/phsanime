@@ -33,14 +33,30 @@
     h1, p {
       padding: 10px;
       color: #FFF;
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.75);
+    }
+    
+    #background-container > span {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      opacity: 0;
+      z-index: -1;
+      
+      background: #836 no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      
+      -webkit-transition: opacity 1s ease-in-out;
+      -moz-transition: opacity 1s ease-in-out;
+      -o-transition: opacity 1s ease-in-out;
+      transition: opacity 1s ease-in-out;
     }
   </style>
-  
-  <script type="text/javascript">
-    var images = ['anohana_01.jpg', 'death-parade_01.jpg', 'hibike_01.png', 'haruhi_01.jpg', 'haruhi_02.jpg', 'snafu_01.jpg', 'toradora_01.jpg'];
-    document.documentElement.style.backgroundImage = 'url(bg/' + images[Math.floor(new Date().getTime() / 2000) % images.length] + ')';
-  </script>
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -48,6 +64,9 @@
 
 </head>
 <body>
+  <!-- Background Cycler
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div id="background-container"></div>
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -60,7 +79,53 @@
     </div>
   </div>
 
-<!-- End Document
+<!-- custom scripts
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script type="text/javascript">
+    function shuffle(array) {
+      var currentIndex = array.length, temporaryValue, randomIndex;
+    
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+    
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+    
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      return array;
+    }  
+  
+    var images = ['anohana_01.jpg', 'death-parade_01.jpg', 'hibike_01.png', 'haruhi_01.jpg', 'haruhi_02.jpg', 'snafu_01.jpg', 'toradora_01.jpg'];
+    shuffle(images);
+    var index = 0;
+    
+    function setBackground(src) {
+      var bgContainer = document.getElementById('background-container');
+      while (bgContainer.children.length > 1)
+        bgContainer.removeChild(bgContainer.firstChild);
+      
+      var span = document.createElement('span');
+      span.style.backgroundImage = 'url(' + src + ')';
+      bgContainer.appendChild(span);
+      
+      var image = new Image();
+      image.onload = (function() {
+        setTimeout(function() { span.style.opacity = 1 }, 100);
+      });
+      image.src = src;
+    }
+    
+    function cycle() {
+      setBackground('bg/' + images[index++]);
+      index %= images.length;
+      setTimeout(cycle, 6000);
+    }
+    cycle();
+  </script>
 </body>
 </html>
