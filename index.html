@@ -76,7 +76,7 @@
       <div class="row">
         <div class="one-half column" style="margin-top: 20%">
           <h1>Piedmont High School <b>Anime</b> Club</h1>
-          <p><b>Monday</b>, <b>Tuesday</b>, and <b>Thursday</b><br />Room <b>32</b> (Hayden's)<br /><b>Lunch</b></p>
+          <p><b>Tuesdays</b>, sometimes <b>Thursdays</b><br />Room <b>32</b> (Hayden's)<br /><b>Lunch</b></p>
         </div>
       </div>
     </div>
@@ -85,7 +85,8 @@
 <!-- custom scripts
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script type="text/javascript">
-    function shuffle(array) {
+    Date.now = Date.now || (function() { return new Date().getTime(); });
+    var images = (function(array) { // shuffle images
       var currentIndex = array.length, temporaryValue, randomIndex;
     
       // While there remain elements to shuffle...
@@ -101,34 +102,37 @@
         array[randomIndex] = temporaryValue;
       }
       return array;
-    }  
-  
-    var images = ['anohana_01.jpg', 'death-parade_01.jpg', 'haruhi_01.jpg', 'haruhi_02.jpg', 'hibike_01.png', 'no-game_01.jpg', 'snafu_01.jpg', 'toradora_01.jpg'];
-    shuffle(images);
-    var index = 0;
+    })(['anohana_01.jpg', 'death-parade_01.jpg', 'haruhi_01.jpg', 'haruhi_02.jpg', 'hibike_01.png', 'no-game_01.jpg', 'snafu_01.jpg', 'toradora_01.jpg']);
     
-    function setBackground(src) {
-      var bgContainer = document.getElementById('background-container');
-      while (bgContainer.children.length > 1)
-        bgContainer.removeChild(bgContainer.firstChild);
+    var bgContainer = document.getElementById('background-container');
+    
+    var index = 0;
+    var timer = 0; //load first immediately
+    
+    cycle();
+    
+    function cycle() {
+      var src = 'bg/' + images[index++];
+      index %= images.length;
       
       var div = document.createElement('div');
-      div.style.backgroundImage = 'url(' + src + ')';
       bgContainer.appendChild(div);
+      div.style.backgroundImage = 'url(' + src + ')';
       
       var image = new Image();
       image.onload = (function() {
-        setTimeout(function() { div.style.opacity = 1 }, 100);
+        setTimeout((function() {
+          div.style.opacity = 1;
+          timer = Date.now();
+          
+          while (bgContainer.children.length > 2)
+            bgContainer.removeChild(bgContainer.firstChild);
+          
+          cycle();
+        }), Math.max(100, 6000 + timer - Date.now())); // wait 0.1-6 seconds before cycling
       });
       image.src = src;
     }
-    
-    function cycle() {
-      setBackground('bg/' + images[index++]);
-      index %= images.length;
-      setTimeout(cycle, 6000);
-    }
-    cycle();
   </script>
 </body>
 </html>
